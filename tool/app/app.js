@@ -571,15 +571,16 @@
         el('label', { 'for': 'r-output', text: '提示詞' }), output, copyBtn, status,
         el('p', { 'class': 'why', text: '提示詞是給 Claude 看的；Claude 的回覆是給你看的，不會貼回網頁。' })
       ]),
+      reviewDetails(),
       el('div', { 'class': 'card' }, [
         el('h3', { text: '覆盤紀錄：存成 PDF 留存' }),
-        el('p', { text: '上面填的內容，加上 Claude 給的下一次建議，可以整理成一份 PDF 留存。按「匯出 PDF」會開啟瀏覽器的列印視窗，把印表機選成「另存為 PDF」就會存成檔案。' }),
+        el('p', { text: '上面填的內容、Claude 給的下一次建議，以及家長回顧，會整理成一份 PDF 留存。按「匯出 PDF」會開啟瀏覽器的列印視窗，把印表機選成「另存為 PDF」就會存成檔案。' }),
         el('label', { 'for': 'r-advice', text: 'Claude 給的下一次建議（選填，會一起存進 PDF）' }), advice,
+        el('p', { id: 'r-review-status', 'class': reviewStatus().done ? 'why' : 'note', text: reviewStatus().text }),
         el('div', { 'class': 'stepper' }, [exportBtn]), exportStatus,
         el('p', { 'class': 'why', text: 'PDF 會自動縮小字體，盡量排在 2 頁內。列印視窗請取消勾選「頁首及頁尾」，PDF 才不會出現日期和這個網頁在你電腦裡的檔案路徑。' }),
         el('p', { 'class': 'note', text: 'PDF 會含有孩子的作文內容，請自己妥善保管，也請不要在紀錄中寫孩子的姓名、學校、班級。' })
       ]),
-      reviewDetails(),
       el('div', { 'class': 'card' }, [
         el('p', { 'class': 'why', text: '下一次再寫作文時，回到第 1 步，帶著新的重點開始。' }),
         el('button', {
@@ -588,6 +589,18 @@
         })
       ])
     ]);
+  }
+
+  // 匯出前提醒家長回顧做到哪裡；沒做完也能匯出，PDF 會留空格讓家長手寫。
+  function reviewStatus() {
+    var review = currentReview();
+    var total = review ? review.questions.length : 0;
+    var answered = review ? review.questions.filter(function (q, i) { return rv.answers[i] === true || rv.answers[i] === false; }).length : 0;
+    if (total && answered === total) return { done: true, text: '家長回顧：已完成，會一起放進 PDF。' };
+    return {
+      done: false,
+      text: '家長回顧：已回答 ' + answered + '／' + total + ' 句。可以先在上面的「家長回顧」勾選；沒做完也能匯出，PDF 會留下空格讓你手寫。'
+    };
   }
 
   function reviewDetails() {

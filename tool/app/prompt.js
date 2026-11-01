@@ -257,6 +257,28 @@
     };
   }
 
+  var REVIEW_HEADING = '家長回顧（一分鐘，每次只看一個改善重點）';
+
+  // PDF 一定放家長回顧：有回答的標 ✓／△，沒回答的留 □ 讓家長印出來手寫勾選。
+  function reviewLines(review, rs, hasReview) {
+    var v = review || {};
+    var qs = v.questions || [];
+    if (!qs.length) return [];
+    var answers = v.answers || [];
+    var lines = [];
+    if (!hasReview) lines.push('這次還沒有在網頁上做回顧，可以印出來後手寫勾選。');
+    qs.forEach(function (q, i) {
+      if (answers[i] === true) lines.push('✓ 做到了：' + q.q);
+      else if (answers[i] === false) lines.push('△ 這次還沒有：' + q.q);
+      else lines.push('□ ' + q.q);
+    });
+    if (rs.focus) lines.push('下次只練這一件事：' + rs.focus.goal + '。怎麼練：' + rs.focus.tip);
+    else if (rs.allAnswered) lines.push('這次每一項都做到了。下次可以試著再少給一點提示。');
+    if (rs.mode) lines.push('這次的引導方式：' + rs.mode);
+    else if (v.modes && v.modes.length) lines.push('這次的引導方式：' + v.modes.map(function (m) { return '□ ' + m; }).join('　'));
+    return lines;
+  }
+
   // 覆盤紀錄：整理成可列印／另存 PDF 的段落。沒有任何實質內容時回傳 null。
   function buildReviewDoc(rec, data, date, review) {
     var r = rec || {};
@@ -284,14 +306,7 @@
     add('理解驗證結果', [r.verify]);
     add('家長的其他觀察', [r.note]);
     add('Claude 給的下一次建議', [r.advice]);
-    if (hasReview) {
-      add('家長回顧', [
-        rs.done.length ? '做到了：' + rs.done.join('') : '',
-        rs.notYet.length ? '這次還沒有：' + rs.notYet.join('') : '',
-        rs.focus ? '下次只練這一件事：' + rs.focus.goal + '。怎麼練：' + rs.focus.tip : '',
-        rs.mode ? '這次的引導方式：' + rs.mode : ''
-      ]);
-    }
+    add(REVIEW_HEADING, reviewLines(review, rs, hasReview));
 
     return {
       title: '作文引導覆盤紀錄',
