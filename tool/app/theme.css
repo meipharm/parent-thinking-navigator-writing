@@ -65,7 +65,7 @@ th, td { border-color: var(--line); }
 .wiz-step.on { background: var(--accent); border-color: var(--accent); }
 
 /* 輸入框 */
-textarea { border: 2px solid var(--line); border-radius: 12px; }
+textarea, input.topic-input { border: 2px solid var(--line); border-radius: 12px; }
 textarea.essay-input { border-color: var(--accent); }
 textarea.essay-input:focus { outline: 3px solid var(--orange-mid); }
 

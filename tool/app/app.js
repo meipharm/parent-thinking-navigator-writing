@@ -28,8 +28,43 @@
   function newWiz() {
     return {
       stage: 1, original: '', polished: '', reply: '', data: null, error: '',
-      rec: { original: '', asked: '', said: '', revised: '', reactions: [], verify: '', note: '', advice: '' }
+      rec: { topic: '', original: '', asked: '', said: '', revised: '', reactions: [], verify: '', note: '', advice: '' }
     };
+  }
+
+  // 新芽成長圖：四個階段的固定原創圖案（常數字串，不含任何使用者輸入）。
+  var SOIL = '<path d="M10 70h60" stroke="#c9a27a" stroke-width="4" stroke-linecap="round"/>';
+  var GROWTH_SVG = [
+    SOIL + '<ellipse cx="40" cy="62" rx="9" ry="6" fill="#b07a4a"/><path d="M36 60c2-2 6-2 8 0" stroke="#8a5a32" stroke-width="1.5" fill="none"/>',
+    SOIL + '<path d="M40 68V50" stroke="#5aa832" stroke-width="3" stroke-linecap="round"/>' +
+      '<path d="M40 55c-8 0-12-4-12-10 7 0 12 4 12 10z" fill="#7cc243"/><path d="M40 52c0-6 4-10 11-10 0 6-4 10-11 10z" fill="#5aa832"/>',
+    SOIL + '<path d="M40 68V28" stroke="#5aa832" stroke-width="3" stroke-linecap="round"/>' +
+      '<path d="M40 60c-9 0-14-5-14-12 8 0 14 5 14 12z" fill="#7cc243"/><path d="M40 52c0-7 5-12 13-12 0 7-5 12-13 12z" fill="#5aa832"/>' +
+      '<path d="M40 42c-7 0-11-4-11-10 6 0 11 4 11 10z" fill="#7cc243"/><path d="M40 35c0-6 4-9 10-9 0 6-4 9-10 9z" fill="#5aa832"/>',
+    SOIL + '<path d="M40 68V28" stroke="#5aa832" stroke-width="3" stroke-linecap="round"/>' +
+      '<path d="M40 60c-9 0-14-5-14-12 8 0 14 5 14 12z" fill="#7cc243"/><path d="M40 52c0-7 5-12 13-12 0 7-5 12-13 12z" fill="#5aa832"/>' +
+      '<path d="M40 42c-7 0-11-4-11-10 6 0 11 4 11 10z" fill="#7cc243"/>' +
+      '<g fill="#ffb366"><circle cx="40" cy="14" r="6"/><circle cx="49" cy="22" r="6"/><circle cx="40" cy="30" r="6"/><circle cx="31" cy="22" r="6"/></g>' +
+      '<circle cx="40" cy="22" r="5" fill="#e8590c"/>'
+  ];
+
+  function growthBadge(growth, cls) {
+    var pic = document.createElement('div');
+    pic.className = 'growth-pic';
+    pic.setAttribute('aria-hidden', 'true');
+    pic.innerHTML = '<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">' + GROWTH_SVG[growth.level] + '</svg>';
+    return el('div', { 'class': 'growth ' + (cls || '') }, [
+      pic,
+      el('div', {}, [el('p', { 'class': 'growth-name', text: '這次的成長：' + growth.name }), el('p', { text: growth.message })])
+    ]);
+  }
+
+  // 家長回顧的作答（供 PDF 與新芽使用），題目沿用案例 A 的回顧題。
+  function currentReview() {
+    var a = findCase('A');
+    var s = a && a.sections.filter(function (x) { return x.id === 'review'; })[0];
+    if (!s || !s.review) return null;
+    return { questions: s.review.questions, answers: rv.answers, modes: s.review.modes, mode: rv.mode };
   }
 
   function todayStr() {
@@ -40,6 +75,7 @@
 
   function renderPrintArea(doc) {
     var kids = [el('h1', { text: doc.title }), el('p', { 'class': 'print-meta', text: '日期：' + doc.date })];
+    if (doc.growth) kids.push(growthBadge(doc.growth, 'print-growth'));
     doc.sections.forEach(function (s) {
       kids.push(el('h2', { text: s.heading }));
       s.items.forEach(function (t) { kids.push(el('p', { 'class': 'print-text', text: t })); });
@@ -68,7 +104,7 @@
 
   // 列印畫面只顯示 #print-area；使用者在列印視窗選「另存為 PDF」即可存檔。
   function exportPdf() {
-    var doc = window.PromptBuilder.buildReviewDoc(wiz.rec, wiz.data, todayStr());
+    var doc = window.PromptBuilder.buildReviewDoc(wiz.rec, wiz.data, todayStr(), currentReview());
     if (!doc) return;
     var stale = document.getElementById('print-area');
     if (stale) stale.parentNode.removeChild(stale);
@@ -473,7 +509,11 @@
       return box;
     }
 
+    var topic = el('input', { type: 'text', id: 'r-topic', 'class': 'topic-input', placeholder: '例如：參觀博物館、我的拿手菜' });
+    topic.value = rec.topic;
+
     var form = el('div', { 'class': 'card' }, [].concat(
+      [el('label', { 'for': 'r-topic', text: '這篇作文的題目或主題' }), topic],
       area('r-original', 'original', '孩子的原稿（選填，讓建議更貼近）', 3, '貼上孩子原本寫的句子'),
       area('r-asked', 'asked', '你問了孩子什麼？', 3, '例如：最先注意到它哪個地方？'),
       area('r-said', 'said', '孩子怎麼回答？（照他的原話寫，比你的問題更重要）', 4, '例如：孩子說「砲管很長，像一根大柱子」；回答「不知道」「好煩」也照寫'),
@@ -494,7 +534,7 @@
     var exportBtn = el('button', { id: 'r-export', 'class': 'primary', text: '匯出 PDF（列印／另存為 PDF）', onclick: exportPdf });
     var exportStatus = el('p', { id: 'r-export-status', 'class': 'why', role: 'status' });
     function refreshExport() {
-      var ok = !!window.PromptBuilder.buildReviewDoc(rec, wiz.data, '');
+      var ok = !!window.PromptBuilder.buildReviewDoc(rec, wiz.data, '', currentReview());
       exportBtn.disabled = !ok;
       exportStatus.textContent = ok ? '' : '請先填「你問了孩子什麼」、「孩子怎麼回答」或「孩子修改後的句子」其中一項。';
     }
@@ -502,6 +542,7 @@
 
     function value(id) { return form.querySelector('#' + id).value; }
     function refresh() {
+      rec.topic = value('r-topic');
       rec.original = value('r-original');
       rec.asked = value('r-asked');
       rec.said = value('r-said');
@@ -901,6 +942,8 @@
         result.push(el('p', { 'class': 'big-say', text: r.allOk }));
       }
       if (rv.mode !== null) result.push(el('p', { 'class': 'why', text: '這次的引導方式：' + r.modes[rv.mode] + '。' + r.modeNote }));
+      var growth = answered && window.PromptBuilder.summarizeReview(currentReview()).growth;
+      if (growth) result.push(growthBadge(growth));
       kids.push(el('div', { 'class': 'card result', role: 'status' }, result));
     }
     return el('div', { 'class': 'card' }, kids);
