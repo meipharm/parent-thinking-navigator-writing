@@ -232,7 +232,7 @@
     return GROWTH[0];
   }
 
-  // 整理家長回顧：做到了、還不太確定、最值得改善的一項（依題目順序第一個不確定）、引導方式、成長階段。
+  // 整理家長回顧：做到了、這次還沒有、下次只練的一件事（依題目順序第一個沒做到的）、引導方式、成長階段。
   function summarizeReview(review) {
     var v = review || {};
     var qs = v.questions || [];
@@ -250,7 +250,7 @@
     return {
       done: done,
       notYet: notYet,
-      focus: focusIndex >= 0 ? { q: qs[focusIndex].q, tip: qs[focusIndex].tip } : null,
+      focus: focusIndex >= 0 ? { q: qs[focusIndex].q, goal: qs[focusIndex].goal || qs[focusIndex].q, tip: qs[focusIndex].tip } : null,
       allAnswered: allAnswered,
       mode: modeText,
       growth: allAnswered ? growthStage(done.length, qs.length) : null
@@ -286,9 +286,9 @@
     add('Claude 給的下一次建議', [r.advice]);
     if (hasReview) {
       add('家長回顧', [
-        rs.done.length ? '做到了：' + rs.done.join('、') : '',
-        rs.notYet.length ? '還不太確定：' + rs.notYet.join('、') : '',
-        rs.focus ? '這次最值得改善的一項：' + rs.focus.q + '　' + rs.focus.tip : '',
+        rs.done.length ? '做到了：' + rs.done.join('') : '',
+        rs.notYet.length ? '這次還沒有：' + rs.notYet.join('') : '',
+        rs.focus ? '下次只練這一件事：' + rs.focus.goal + '。怎麼練：' + rs.focus.tip : '',
         rs.mode ? '這次的引導方式：' + rs.mode : ''
       ]);
     }

@@ -901,7 +901,7 @@
     ]);
   }
 
-  // 一次只提出一個最值得改善的技巧：依題目順序，取第一個「還不太確定」。
+  // 一次只提出一個下次要練的事：依題目順序，取第一個「這次還沒有」。
   function renderReview(r) {
     var kids = [];
     r.questions.forEach(function (q, i) {
@@ -912,8 +912,8 @@
       kids.push(el('div', { 'class': 'review-row' }, [
         el('p', { 'class': 'review-q', text: (i + 1) + '. ' + q.q }),
         el('div', { 'class': 'tabs' }, [
-          el('button', { id: 'rv-' + i + '-y', 'aria-pressed': String(ans === true), text: '是', onclick: pick(true) }),
-          el('button', { id: 'rv-' + i + '-n', 'aria-pressed': String(ans === false), text: '還不太確定', onclick: pick(false) })
+          el('button', { id: 'rv-' + i + '-y', 'aria-pressed': String(ans === true), text: r.yesLabel || '做到了', onclick: pick(true) }),
+          el('button', { id: 'rv-' + i + '-n', 'aria-pressed': String(ans === false), text: r.noLabel || '這次還沒有', onclick: pick(false) })
         ])
       ]));
     });
@@ -925,7 +925,7 @@
       });
     })));
     kids.push(el('button', {
-      id: 'rv-show', 'class': 'primary', text: '看這次最值得改善的一項',
+      id: 'rv-show', 'class': 'primary', text: '看下次只練哪一件事',
       onclick: function () { rv.shown = true; state.focusId = 'rv-show'; render(); }
     }));
 
@@ -937,7 +937,12 @@
       if (!answered) {
         result.push(el('p', { text: '還有題目沒回答，請先回答完再看。' }));
       } else if (first >= 0) {
-        result.push(el('h4', { text: '這次最值得改善的一項' }), el('p', { 'class': 'big-say', text: r.questions[first].q }), el('p', { text: r.questions[first].tip }));
+        result.push(
+          el('h4', { text: '下次只練這一件事' }),
+          el('p', { 'class': 'big-say', text: r.questions[first].goal }),
+          el('p', { text: '怎麼練：' + r.questions[first].tip }),
+          el('p', { 'class': 'why', text: '你選了「這次還沒有」的是：' + r.questions[first].q + '其他還沒做到的，等這件練熟再說。' })
+        );
       } else {
         result.push(el('p', { 'class': 'big-say', text: r.allOk }));
       }
