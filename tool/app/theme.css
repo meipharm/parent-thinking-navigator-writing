@@ -1,0 +1,82 @@
+/* 公開試用版主題：和說明網站一致（白底、橘色、原創小芽小花）。
+   由 scripts/build-public-tool.js 複製成 tool/app/theme.css，載入順序在 style.css 之後。本機完整版不使用。 */
+:root {
+  --bg: #fffaf5;
+  --card: #ffffff;
+  --text: #2b2b2b;
+  --muted: #5c5c5c;
+  --accent: #e8590c;
+  --accent-soft: #fff3e8;
+  --warn-soft: #fff7ec;
+  --line: #f1dccb;
+  --orange-dark: #c2410c;
+  --orange-mid: #ffb366;
+
+  --sprout: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 30V15' stroke='%235aa832' stroke-width='2.6' stroke-linecap='round' fill='none'/%3E%3Cpath d='M16 17C10 17 6 13 6 7c6 0 10 4 10 10z' fill='%237cc243'/%3E%3Cpath d='M16 14c0-5 4-9 10-9 0 6-4 9-10 9z' fill='%235aa832'/%3E%3C/svg%3E");
+  --garden: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 32'%3E%3Cpath d='M14 30V18' stroke='%235aa832' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M14 20c-5 0-8-3-8-8 5 0 8 3 8 8z' fill='%237cc243'/%3E%3Cpath d='M14 18c0-4 3-7 8-7 0 5-3 7-8 7z' fill='%235aa832'/%3E%3Cg transform='translate(46 10)'%3E%3Cg fill='%23ffb366'%3E%3Ccircle cx='8' cy='3' r='3.5'/%3E%3Ccircle cx='13' cy='8' r='3.5'/%3E%3Ccircle cx='8' cy='13' r='3.5'/%3E%3Ccircle cx='3' cy='8' r='3.5'/%3E%3C/g%3E%3Ccircle cx='8' cy='8' r='3' fill='%23e8590c'/%3E%3C/g%3E%3Cpath d='M54 30v-6' stroke='%235aa832' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M92 30V22' stroke='%235aa832' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M92 24c-4 0-6-2-6-6 4 0 6 2 6 6z' fill='%237cc243'/%3E%3Cpath d='M92 23c0-3 2-6 6-6 0 4-2 6-6 6z' fill='%235aa832'/%3E%3Ccircle cx='108' cy='28' r='2' fill='%23ffb366'/%3E%3Ccircle cx='32' cy='29' r='1.6' fill='%23ffb366'/%3E%3C/svg%3E");
+}
+
+a { color: var(--orange-dark); }
+
+/* 頁首：小芽圖示、橘色底線、回到說明網站 */
+.site-header { border-bottom: 4px solid var(--accent); padding-bottom: 6px; margin-bottom: 14px; }
+.site-header h1 { display: flex; align-items: center; gap: 8px; color: var(--text); }
+.site-header h1::before { content: ""; flex: none; width: 32px; height: 32px; background: var(--sprout) center / contain no-repeat; }
+.back-link { margin: 0 0 10px; }
+.back-link a { font-weight: bold; text-decoration: none; }
+.back-link a:hover { text-decoration: underline; }
+
+.boundary { background: var(--card); border: 2px dashed var(--orange-mid); border-radius: 16px; }
+
+/* 按鈕：圓角膠囊 */
+button { border: 2px solid var(--line); border-radius: 999px; }
+button:hover { border-color: var(--accent); }
+button:focus-visible { outline-color: var(--orange-mid); }
+button[aria-pressed="true"], button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.primary { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: 0 3px 0 var(--orange-dark); }
+.primary:hover { background: var(--orange-dark); border-color: var(--orange-dark); }
+.react, .quiz-opt { border-radius: 14px; }
+.pause-btn { border-radius: 999px; }
+
+/* 卡片、標題、表格 */
+.card { border: 2px solid var(--line); border-radius: 16px; }
+main h2 { display: flex; align-items: center; gap: 8px; }
+main h2::before { content: ""; flex: none; width: 24px; height: 24px; background: var(--sprout) center / contain no-repeat; }
+.case-head .mode { color: var(--orange-dark); }
+th { background: var(--accent-soft); color: var(--orange-dark); }
+th, td { border-color: var(--line); }
+.more summary, .point-list dt { color: var(--orange-dark); }
+
+/* 首頁入口卡片：淺橘底，右下角一排小芽小花 */
+.start-card {
+  border-color: var(--accent);
+  background: var(--accent-soft) var(--garden) right 14px bottom 10px / 130px auto no-repeat;
+  padding-bottom: 44px;
+}
+.start-card h2 { color: var(--orange-dark); }
+
+/* 引導畫面 */
+.ask-card { border-color: var(--accent); }
+.result, .say { background: var(--accent-soft); }
+.badge { background: var(--accent-soft); color: var(--orange-dark); }
+.dot.on { background: var(--accent); }
+.dot.done { background: var(--orange-mid); }
+.wiz-step.done { background: var(--accent-soft); border-color: var(--orange-mid); }
+.wiz-step.on { background: var(--accent); border-color: var(--accent); }
+
+/* 輸入框 */
+textarea { border: 2px solid var(--line); border-radius: 12px; }
+textarea.essay-input { border-color: var(--accent); }
+textarea.essay-input:focus { outline: 3px solid var(--orange-mid); }
+
+/* 頁尾：上方一排小芽小花 */
+.site-footer::before {
+  content: ""; display: block; height: 32px; margin-bottom: 8px;
+  background: var(--garden) left bottom / 120px 32px repeat-x;
+  border-bottom: 3px solid var(--orange-mid);
+}
+
+@media (max-width: 640px) {
+  .start-card { background-size: 100px auto; }
+  .big-btn { display: block; width: 100%; font-size: 18px; padding: 12px 14px; }
+}
