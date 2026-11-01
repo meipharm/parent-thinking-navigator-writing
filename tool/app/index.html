@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>親子思考導航員 Agent</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <h1>親子思考導航員</h1>
+    <p>給家長的引導工具：先學會怎麼拆解、怎麼問，再陪孩子自己想。</p>
+  </header>
+
+  <details class="boundary" aria-label="能力界線">
+    <summary><strong>目前是離線示範版（點開看說明）</strong></summary>
+    <p>這個頁面專門處理「作文卡關」。案例是事先寫好的，會依你選的孩子反應切換下一步，但<b>不能分析你自己的新作文或新題目</b>，也不是即時 AI 對話。想處理你自己的新作文，請按「貼上孩子的作文」：網頁幫你準備提示詞，由你貼到 Claude，再把回覆貼回來，就能在同一頁一題一題引導孩子。網頁本身不會連網。</p>
+  </details>
+
+  <main id="app">
+    <p>載入中……</p>
+  </main>
+
+  <footer class="site-footer">
+    <p>案例皆為虛構，不含真實個資。你可以隨時暫停，或依孩子的狀況自行決定怎麼做。</p>
+    <p>這是公開試用版：你貼上的作文只留在你自己的瀏覽器，不會上傳，也不會被其他人看到；重新整理就會清空。公開版已移除參考付費課程整理的內容。<a href="../../index.html">回到說明網站</a></p>
+  </footer>
+
+  <script src="../examples/case-a.js"></script>
+  <script src="../examples/sample-reply.js"></script>
+  <script src="../examples/writing-guide.js"></script>
+  <script src="../examples/teacher-view.js"></script>
+  <script src="prompt.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

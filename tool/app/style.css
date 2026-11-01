@@ -1,0 +1,188 @@
+:root {
+  --bg: #faf8f4;
+  --card: #ffffff;
+  --text: #2b2b2b;
+  --muted: #666;
+  --accent: #2f6f5e;
+  --accent-soft: #e3f0ec;
+  --warn-soft: #fff4dc;
+  --line: #ddd6c8;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.site-header, .boundary, main, .site-footer {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.site-header { padding-top: 24px; }
+.site-header h1 { margin: 0; font-size: 28px; color: var(--accent); }
+.site-header p { margin: 4px 0 16px; color: var(--muted); }
+
+.boundary {
+  background: var(--warn-soft);
+  border-left: 4px solid #e0a82e;
+  padding: 8px 16px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+}
+.boundary p { margin: 4px 0; }
+.boundary summary { cursor: pointer; }
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--text);
+  padding: 8px 14px;
+  border-radius: 6px;
+}
+button:hover { border-color: var(--accent); }
+button:focus-visible { outline: 3px solid #7fb5a6; outline-offset: 2px; }
+button[aria-pressed="true"], button[aria-selected="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+.card h3 { margin-top: 0; }
+.card { overflow-wrap: anywhere; } /* 長網址在手機寬度也要能換行 */
+
+.case-head h2 { margin: 8px 0 0; }
+.case-head .mode { color: var(--accent); font-weight: bold; margin: 0; }
+
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 640px) { .cols { grid-template-columns: 1fr; } }
+.text-box { background: var(--bg); border-radius: 6px; padding: 10px 14px; }
+.text-box h4 { margin: 0 0 4px; font-size: 15px; color: var(--muted); }
+
+table { width: 100%; border-collapse: collapse; font-size: 15px; }
+th, td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+th { background: var(--accent-soft); }
+
+.badge {
+  display: inline-block;
+  padding: 0 8px;
+  border-radius: 10px;
+  font-size: 14px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.badge.pause { background: #f9e0dc; color: #9a3a2a; }
+
+.question { font-size: 21px; font-weight: bold; margin: 8px 0; }
+.why { color: var(--muted); }
+.say { background: var(--accent-soft); border-radius: 6px; padding: 10px 14px; margin: 8px 0; }
+.note { background: var(--warn-soft); border-radius: 6px; padding: 10px 14px; margin: 8px 0; }
+
+/* 導覽式問題頁（案例 A） */
+.ask-card { border: 2px solid var(--accent); }
+.big-question { font-size: 26px; font-weight: bold; line-height: 1.5; margin: 8px 0 12px; }
+.big-say { font-size: 20px; margin: 8px 0; }
+.dots { display: flex; gap: 6px; margin-bottom: 8px; }
+.dot { width: 12px; height: 12px; border-radius: 50%; background: var(--line); }
+.dot.on { background: var(--accent); }
+.dot.done { background: #8fc0b2; }
+
+.react-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+@media (max-width: 640px) { .react-grid { grid-template-columns: 1fr 1fr; } }
+.react { padding: 14px 8px; font-size: 18px; font-weight: bold; border-width: 2px; }
+.react, .react[aria-pressed="true"] { background: var(--r-bg); border-color: var(--r-bd); color: var(--text); }
+.react-unknown { --r-bg: #fff6d6; --r-bd: #e0b94a; }
+.react-wrong { --r-bg: #e4eefb; --r-bd: #7aa3d6; }
+.react-upset { --r-bg: #fbe4df; --r-bd: #d98a7c; }
+.react-understood { --r-bg: #e0f2e9; --r-bd: #6fb38d; }
+.react[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--text); }
+
+.result { background: var(--accent-soft); }
+.more summary { cursor: pointer; color: var(--accent); }
+.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: bold; }
+.primary:hover { border-color: var(--text); }
+.pause-btn { border-color: #d98a7c; }
+.pause-btn[aria-pressed="true"] { background: #9a3a2a; border-color: #9a3a2a; }
+button:disabled { opacity: 0.4; cursor: default; }
+
+/* 理解驗證與教學回顧 */
+.quiz-opt { display: block; width: 100%; text-align: left; margin: 6px 0; }
+.quiz-ok { background: var(--accent-soft); border-radius: 6px; padding: 8px 12px; }
+.quiz-no { background: var(--warn-soft); border-radius: 6px; padding: 8px 12px; }
+.review-row { margin: 8px 0 12px; }
+.review-q { font-weight: bold; margin: 8px 0 4px; }
+
+/* 首頁入口與作文輸入框：要一眼看得到 */
+.start-card { border: 2px solid var(--accent); background: var(--accent-soft); }
+.start-card h2 { margin: 0 0 4px; color: var(--accent); }
+.big-btn { font-size: 20px; padding: 12px 24px; margin: 6px 0; }
+label.big-label { display: block; font-size: 18px; margin-top: 10px; }
+textarea.essay-input { font-size: 18px; min-height: 200px; border: 2px solid var(--accent); }
+textarea.essay-input:focus { outline: 3px solid #7fb5a6; }
+
+/* 家長逐點學習 */
+.point-list { margin: 8px 0; }
+.point-list dt { font-weight: bold; margin-top: 10px; color: var(--accent); }
+.point-list dd { margin: 2px 0 0; }
+.point-list dd p { margin: 4px 0; }
+
+/* 覆盤紀錄：只在列印（另存 PDF）時顯示 */
+#print-area { display: none; }
+@page { margin: 18mm; }
+@media print {
+  body > *:not(#print-area) { display: none !important; }
+  body { background: #fff; color: #000; line-height: 1.5; }
+  #print-area { display: block; font-size: 11pt; }
+  #print-area h1 { font-size: 1.7em; margin: 0 0 0.2em; }
+  #print-area h2 { font-size: 1.1em; margin: 0.9em 0 0.25em; border-bottom: 1px solid #999; padding-bottom: 0.1em; }
+  #print-area p { margin: 0 0 0.35em; }
+  #print-area .print-meta { color: #444; }
+  #print-area .print-text { white-space: pre-wrap; }
+  #print-area .print-foot { margin-top: 1.2em; font-size: 0.85em; color: #555; }
+}
+
+/* 新作文引導：步驟列 */
+.wiz-bar { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+.wiz-step { font-size: 15px; padding: 6px 10px; }
+.wiz-step.done { background: var(--accent-soft); border-color: #8fc0b2; }
+.wiz-step.on { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: bold; }
+.error { background: #fbe4df; border-left: 4px solid #d98a7c; border-radius: 4px; padding: 8px 12px; margin: 8px 0; }
+
+textarea {
+  display: block;
+  width: 100%;
+  font: inherit;
+  padding: 8px 10px;
+  margin: 4px 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--text);
+}
+textarea[readonly] { background: var(--bg); font-size: 14px; }
+label { font-weight: bold; }
+label.inline { font-weight: normal; }
+fieldset.choices { border: 1px solid var(--line); border-radius: 6px; margin: 4px 0 12px; }
+fieldset.choices legend { font-weight: bold; padding: 0 6px; }
+
+ul.donts li::marker { color: #9a3a2a; }
+.stepper { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+.site-footer { color: var(--muted); font-size: 14px; padding-bottom: 32px; }
